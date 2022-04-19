@@ -1,0 +1,26 @@
+---
+- hosts: loadbalancer
+  become: true
+  tasks:
+    - name: install loadbalancer
+      apt: name=haproxy state=present
+    - name: check loadbalancer config
+      lineinfile:
+        dest: /etc/default/haproxy
+        regexp: "^ENABLED.+$"
+        line: "ENABLED=1"
+        state: present
+- hosts: web
+  become: true
+  tasks:
+    - name: install apache2
+      apt: name=apache2 state=present
+    - name: start service apache2
+      service: name=apache2 state=started enabled=yes
+- hosts: database
+  become: true
+  tasks:
+    - name: install mariadb
+      apt: name=mariadb-server state=present
+    - name: start service mariadb
+      service: name=mysql state=started enabled=yes
