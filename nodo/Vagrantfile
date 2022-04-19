@@ -1,10 +1,59 @@
+ssh_pub_key = File.readlines("../master/.ssh/id_rsa.pub").first.strip
+
 Vagrant.configure("2") do |config|
-    config.vm.box = "bento/ubuntu-16.04"
-    config.vm.network "private_network", ip: "192.168.56.11"
-    config.vm.hostname = "node1"
-    config.vm.provider "virtualbox" do |vb|
-        vb.cpus = 1
-        vb.memory = 512
-        vb.gui = false
+    config.vm.define "node1" do |m|
+        m.vm.box = "bento/ubuntu-16.04"
+        m.vm.hostname = "node1"
+        m.vm.network "private_network", ip: "192.168.56.11"
+        m.vm.provider "virtualbox" do |vb|
+            vb.cpus = "1"
+            vb.memory = "512"
+            vb.gui = false
+        end
+        m.vm.provision "shell", inline: <<-SHELL
+            echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
+SHELL
+    end
+
+    config.vm.define "node2" do |m|
+        m.vm.box = "bento/ubuntu-16.04"
+        m.vm.hostname = "node2"
+        m.vm.network "private_network", ip: "192.168.56.12"
+        m.vm.provider "virtualbox" do |vb|
+            vb.cpus = "1"
+            vb.memory = "512"
+            vb.gui = false
+        end
+        m.vm.provision "shell", inline: <<-SHELL
+            echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
+SHELL
+    end
+
+    config.vm.define "node3" do |m|
+        m.vm.box = "bento/ubuntu-16.04"
+        m.vm.hostname = "node3"
+        m.vm.network "private_network", ip: "192.168.56.13"
+        m.vm.provider "virtualbox" do |vb|
+            vb.cpus = "1"
+            vb.memory = "512"
+            vb.gui = false
+        end
+        m.vm.provision "shell", inline: <<-SHELL
+            echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
+SHELL
+    end
+
+    config.vm.define "node4" do |m|
+        m.vm.box = "bento/ubuntu-16.04"
+        m.vm.hostname = "node4"
+        m.vm.network "private_network", ip: "192.168.56.14"
+        m.vm.provider "virtualbox" do |vb|
+            vb.cpus = "1"
+            vb.memory = "512"
+            vb.gui = false
+        end
+        m.vm.provision "shell", inline: <<-SHELL
+            echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
+SHELL
     end
 end
