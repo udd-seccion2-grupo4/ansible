@@ -22,5 +22,27 @@
   tasks:
     - name: install mariadb
       apt: name=mariadb-server state=present
-    - name: start service mariadb
+    - name: check mysql service
       service: name=mysql state=started enabled=yes
+- hosts: web
+  become: true
+  tasks:
+    - name: copiar integrantes
+      copy:
+        src: /home/vagrant/projects/integrantes.md 
+        dest: /tmp/
+        mode: 0644
+    - name: revisar hora sincronizada
+      command: date
+- hosts: all
+  become: true
+  tasks:
+    - name: crear grupo4
+      command: groupadd -f grupo4
+    - name: agregar integrantes al grupo 4
+      shell: |
+        useradd -M -G grupo4 ngamboa
+        useradd -M -G grupo4 nagurto
+        useradd -M -G grupo4 llopez
+        useradd -M -G grupo4 jcontreras
+        useradd -M -G grupo4 pcampos
